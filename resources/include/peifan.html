@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>色粉管理 - Combine Will</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/print.css">
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/indexedb.js"></script>
+    <script type="text/javascript" src="../js/script.js"></script>
+    <script type="text/javascript" src="../js/print.js"></script>
+</head>
+<body>
+    <!-- 主面板 START -->
+    <div id="wrapper">
+
+        <!-- 面板切换 START -->
+        <div class="wrap-header">
+            <div class="entry-changing">
+                <a href="javascript:;" class="active">手动</a>
+                <a href="javascript:;">快速</a>
+            </div>
+        </div>
+        <!-- 面板切换 END -->
+
+        <!-- 输入区 START -->
+        <div class="container" id="peifan">
+            
+            <!-- 手动开单 （1） START -->
+            <div class="panel-container show">
+                <div id="peifan-1">
+                    <div class="panel-wrap">
+                        <div class="row-6 scheme-panel">
+                            <div class="wrap">
+                                <input type="button" class="push-scheme green" value="添加">
+                                <div class="scheme-list">
+                                    <div class="base-head">
+                                        <p><label>色粉编号：</label><input type="text" class="color-name"></p>
+                                        <p><label>生产批号：</label><input type="text" class="time-number" placeholder="0cc100" ></p>
+                                        <p><label>加扩散油：</label><button class="addoil-btn">否</button></p>
+                                        <p><span>基色编号</span><span>重量（克）</span></p>
+                                    </div>
+                                    <div class="base-color">
+                                        <p class="color-list"><input type="text" class="color"> <input type="text" class="number"></p>
+                                        <p class="color-list"><input type="text" class="color"> <input type="text" class="number"></p>
+                                        <p class="color-list"><input type="text" class="color"> <input type="text" class="number"></p>
+                                        <p class="color-list"><input type="text" class="color"> <input type="text" class="number"></p>
+                                    </div>
+                                    <div class="base-foot">
+                                        <p><button class="add-color-list">++++++++++++++ 添加 +++++++++++++++</button></p>
+                                        <p><label>包装份数：</label><input type="text" class="pack" placeholder="默认为3份"> <button class="pack-btn">份</button></p>
+                                        <p><label>开单数量：</label><input type="text" class="amount"> <button class="amount-btn">份</button></p>
+                                        <p><label>开单总数：</label><input type="text" class="metering" placeholder="默认为空"> <button class="metering-btn">桶</button></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-4 scheme-team">
+                            <ul class="wrap">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="reset-button" tabIndex="-1">重置面板</button>
+                        <button class="clear-button" tabIndex="-1">清空输入</button>
+                        <button class="preview-scheme green right" tabIndex="-1">生成配方</button>
+                        <button class="preview-tags green right" tabIndex="-1">生成标签</button>
+                    </div>    
+                </div>
+            </div>    
+            <!-- 手动开单 （1） END -->
+            
+            <!-- 快速开单 （2） START -->
+            <div class="panel-container">
+                2
+            </div>
+            <!-- 快速开单 （2） END -->
+
+        </div>
+        <!-- 输入区 END -->
+
+    </div>
+    <!-- 主面板 END -->
+
+
+    <!-- 打印详情 START -->
+    <div id="print-control" class="print-control hide">
+        <!-- 预览 START -->
+        <div id="print-view" class="print-wrap scheme">
+            <!-- div class="box">
+                <div class="wrap">
+                    <div class="head">
+                        <div class="title">
+                            <h1>A77777 荧光紫蓝红色</h1>
+                            <p>0CC100106654</p>
+                        </div>
+                        <div class="aside">
+                            <p>100 克 ／1 份</p>
+                            <p>300 克 ／3 份 × 100包</p>
+                        </div>
+                        <hr>
+                        <hr>
+                        <div class="info">
+                            <div class="top">
+                                <p>加扩散油</p>
+                                <p>60 份 × 5 桶</p>
+                                <p>共计 300份</p>
+                            </div>
+                            <div class="bottom">
+                                <hr>
+                                <hr>
+                                <p>这是色粉信息，手动开单不出现这是,色粉信息，手动开单不出现</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <hr>
+                    <div class="body">
+                        <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                        <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                        <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                        <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                        <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                        <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                        <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                    </div>
+                    <hr>
+                    <hr>
+                    <hr>
+                    <div class="foot">
+                        <p>总重量：3000 克</p>
+                        <p>开单时间：2016年12月20日 星期三</p>
+                    </div>
+                </div>
+            </div -->
+        </div>
+        <!-- 预览 END -->
+
+        <!-- 信息面板 START -->
+        <div class="print-panel">
+            <div class="panel-box row">
+                <h2 class="info-title">打印信息</h2>
+                <div class="info-panel">
+                    <p><b>打印页数：</b><span>5 页</span></p>
+                    <p><b>纸张大小：</b><span>A4</span></p>
+                </div>
+            </div>
+            <div class="button-wrap">
+                <button id="enter-print" class="print-button green" tabIndex="-1">打印</button>
+                <button id="close-print" class="print-button" tabIndex="-1">取消</button>
+            </div>
+        </div>
+        <!-- 信息面板 END -->
+    </div>
+    <!-- 打印详情 END -->
+
+    <!-- 打印区域 START -->
+    <div id="print-wrap" class="print-wrap">
+        <div class="box">
+            <div class="wrap">
+                <div class="head">
+                    <div class="title">
+                        <h1>A77777 荧光紫蓝红色</h1>
+                        <p>0CC100106654</p>
+                    </div>
+                    <div class="aside">
+                        <p>100 克 ／1 份</p>
+                        <p>300 克 ／3 份 × 100包</p>
+                    </div>
+                    <hr>
+                    <hr>
+                    <div class="info">
+                        <div class="left">
+                            <p>加扩散油</p>
+                            <p>这是色粉信息，手动开单不出现这是,色粉信息，手动开单不出现</p>
+                        </div>
+                        <div class="right">
+                            <p>60 份 × 5 桶</p>
+                            <p>共计 300份</p>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <hr>
+                <div class="body">
+                    <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                    <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                    <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                    <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                    <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                    <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                    <p><span>CS2037 紫蓝色</span><span>20</span></p>
+                </div>
+                <hr>
+                <hr>
+                <hr>
+                <div class="foot">
+                    <p>总重量：3000 克</p>
+                    <p>开单时间：2016年12月20日 星期三</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 打印区域 END -->
+</body>
+</html>
