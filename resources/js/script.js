@@ -1,5 +1,5 @@
 var mySqlDB = new webSqlDataBase({
-		name: 'CWSEFEN3',
+		name: 'CWSEFEN',
 		version: '10',
 		title: 'Combine Will',
 		size: 1024
@@ -30,9 +30,6 @@ $(document).ready(function () {
 		})
 	 });
 
-
-
-
  });
 
 
@@ -56,6 +53,7 @@ window.addEventListener('load', function () {
 
  });
 
+
 //包含页面函数
 function includePages() {
 	//页面函数
@@ -69,11 +67,6 @@ function includePages() {
 	setInputFocus();
 }
 
-
-
-/**
- * 执行函数
- **/
 
 //添加输入框初始事件
 function setInputFocus() {
@@ -115,7 +108,8 @@ function setInputFocus() {
 //重置面板
 function resetPage() {
 
-	var aButton = document.getElementById('wrapper').getElementsByClassName('reset-button');
+	var aButton = document.querySelectorAll('#wrapper .reset-button');
+
 	if(!aButton) return;
 
 	for(var i=0; i<aButton.length; i++) {
@@ -136,13 +130,13 @@ function resetPage() {
 }
 
 
+function removeDisabled(select) {
+	var ele = document.querySelectorAll(select + ' *');
+	for(var i=0, len=ele.length; i<len; i++) {
+		ele[i].removeAttribute('disabled');
+	}
+}
 
-
-
-
-/**
- * 调用函数
- **/
 
 //删除指定元素
 function removeTeam(_element){
@@ -199,7 +193,7 @@ function time(str) {
                 return vle[date.getMonth()];
             }else{
                 if(vle == 'm') {
-                    if(date.getMonth < 9 ) {
+                    if(date.getMonth() < 9 ) {
                         return '0' + (date.getMonth() + 1).toString();
                     }else{
                         return (date.getMonth() + 1).toString();
@@ -459,7 +453,7 @@ function biaoqian() {
 			//初始化数据
 			var printInfo = eval('(' + this.parentNode.parentNode.getAttribute('print-info') + ')');
 			var data = getData.domValue(aWrap, 'input', 'name', 'value'); //获取JSON数据
-			var sun = {a:0, b:0, c:0, d:0}; //用于判断的值
+			var sun = {a:0, b:0, d:0}; //用于判断的值
 			var sizeSun = 35;
 			var pageNum = 1;
 			var html = '<ul>';
@@ -522,17 +516,17 @@ function biaoqian() {
 					for(var j=0; j<data[i].num; j++) {
 						
 						sun.a++;
-						sun.c++;
 						html += ele + '</li>';
 
 						//为打印页断页
 						if(sun.a == sizeSun) {
+							
 							sun.a = 0;
 							sun.b -= sizeSun;
 
-							if(sun.b > 0) {
+							if(sun.b >= 0 ) {
 								html += '</ul><ul>';
-								pageNum ++;
+								sun.e -= sizeSun;
 							}
 
 						}
@@ -545,17 +539,36 @@ function biaoqian() {
 			
 			//数据循环结束
 			html += '</ul>';
-			
+
 			//输出打印数据和预览
 			printWrap.innerHTML = printView.innerHTML = html;
+
+			(function () {
+				var al = printWrap.querySelectorAll('ul');
+				var bl = printView.querySelectorAll('ul');
+				var i = al.length;
+
+				if(al[i-1].innerHTML == '') {
+					al[i-1].parentNode.removeChild(al[i-1]);
+					bl[i-1].parentNode.removeChild(bl[i-1]);
+					i -=1;
+				}
+				
+				pageNum = i;
+
+			}());
+
+
 			infoPanel.innerHTML = '<p><b>打印页数：</b><span>' + pageNum + ' 页</span></p><p><b>纸张大小：</b><span>' + printInfo.letter + '</span></p>';
 			printWrap.className = printView.className = printClassName;
 			
 			//显示预览面板
-			if(sun.c) {
+			if(pageNum) {
 				$('#print-control').removeClass('hide');
 			}
 			
+
+
 
 			return false;
 		}
@@ -915,11 +928,25 @@ function peifan() {
 		//面板按钮
 		var pushSchemeBtn = schemeEntry.querySelector('.push-scheme');
 		var clearBtn = contaner.querySelector('.clear-button');
+		var createTagsBtn = contaner.querySelector('.preview-tags');
 		var previewSchemeBtn = contaner.querySelector('.preview-scheme');
 		var addColorListBtn = schemeEntry.querySelector('.add-color-list');
+		var closePrintBtn = document.querySelector('#close-print');
+		var schemeInfo = '';
 
 		//触发暂存按钮将输入的配方添加到暂存栏
 		pushSchemeBtn.onclick = createScheme;
+
+		createTagsBtn.onclick = createTags;
+
+		closePrintBtn.addEventListener('click', function () {
+			var printView = document.querySelector('#print-view');
+			var printBox = document.querySelector('#print-wrap');
+
+			printBox.innerHTML = printView.innerHTML = sessionStorage.getItem('peifan-print-content');
+			printBox.className = printView.className = 'print-wrap scheme';
+
+		});
 
 		//触发配方生成按钮将暂存的配方计算并输出到预览
 		previewSchemeBtn.onclick = function () {
@@ -950,7 +977,6 @@ function peifan() {
 
 			var listInfo = document.createElement('div');
 				listInfo.className = 'list-info';
-
 			
 			var info = {};
 				info.name = contentHtml.querySelector('.color-name').value;
@@ -970,6 +996,7 @@ function peifan() {
 				info.allNumber = 0;
 				info.singleNumber = 0;
 				info.packNumber = 0;
+				info.tagsNumber = 0;
 				
 				info.packValue = '';
 				info.amounValue = '';
@@ -977,6 +1004,10 @@ function peifan() {
 				info.meterValue = '';
 				info.amountPack = '';
 				
+
+				info.bagsa = '';
+				info.bagsb = '';
+
 			for(var i=0, len=info.numberArr.length; i<len; i++) {
 				info.allNumber -= info.numberArr[i].value;
 			}
@@ -1030,9 +1061,40 @@ function peifan() {
 			}
 
 			if(info.meterObj.value != '' && info.amountObj.name != 'kg') {
-				info.meterValue = '× ' + info.meterObj.value + '桶';
-				info.amountPack = numMulti(info.amountObj.value, info.meterObj.value) + '份'; 
+				info.meterValue = '× ' + info.meterObj.value + ' 桶';
+				info.amountPack = numMulti(info.amountObj.value, info.meterObj.value) + ' 份'; 
 			}
+
+
+			(function () {
+				var num1 = parseInt(info.amountPack);
+				var num2 = parseInt(info.packValue);
+
+				if(info.amountObj.name == 'kg' || info.packObj.name == 'kg') {
+					info.tagsNumber = 0;
+				} else {
+					info.tagsNumber = parseInt(numDiv(num1, num2)) + num1%num2;
+					
+					info.bagsa = '<span>×' + parseInt(numDiv(num1, num2)) + '</span>';
+					info.bagsb = num1%num2 ? '<span>×' + num1%num2 + '</span>' : '';
+				}
+
+			}())
+
+
+			var tagsInfo = {};
+				tagsInfo.name = info.name;
+				tagsInfo.pack = info.packValue;
+				tagsInfo.oil = info.oil;
+				
+				if(/^[0-9a-zA-Z]*$/g.test(info.time)) {
+					tagsInfo.time = info.time;
+				}else{
+					tagsInfo.time = time('0ccyymmdd01');
+				}
+
+				listInfo.setAttribute('tags-info',JSON.stringify(tagsInfo));
+
 
 			//计算配方
 			var previewBox = document.querySelector('#print-view'); //获取预览容器
@@ -1070,10 +1132,10 @@ function peifan() {
 							}
 
 							info.listStr += '<p><span>' + data[0]['name'] + ' ' + data[0]['color'] + '</span><span>' + theNumber + '</span></p>';
-
+							
 
 							if(int == computePushIntum && computePushJudge) printContentFun();
-								
+							removeDisabled('#peifan-1 .scheme-panel');
 								
 						});
 
@@ -1096,10 +1158,10 @@ function peifan() {
 
 			//添加到暂存栏的信息
 			var infoHtml =  '<p>编号：<span>' + info.name + '</span></p>' +
-                    		'<p>数量：<span>' + info.amounValue + '</span></p>' +
                         	'<p>总重：<span>' + info.allNumber +' 克</span></p>' +
                         	'<p>包装：<span>' + info.packValue + '</span></p>' +
-                        	'<p>总数：<span>' + info.amountPack + '</span></p>';
+                        	'<p>总数：<span>' + info.amountPack + '</span></p>' +
+                    		'<p>标签：<span><input type="text" value="' + info.tagsNumber + '" not-disabled="true" > 个</span></p>';
 				listInfo.innerHTML = infoHtml;
 			
 			var listRevise = document.createElement('button');
@@ -1120,9 +1182,9 @@ function peifan() {
 									+ '</h1><p>'
 									+ info.time
 									+ '</p></div><div class="aside"><p>'
-									+ info.singleNumber + '克 ／1 份'
+									+ info.singleNumber + '克 ／1 份' + info.bagsb
 									+ '</p><p>'
-									+ info.packNumber + ' 克 ／' + info.packValue
+									+ info.packNumber + ' 克 ／' + info.packValue + info.bagsa
 									+ '</p></div><hr><hr><div class="info"><div class="top"><p>'
 									+ info.oil
 									+ '</p><p>'
@@ -1139,21 +1201,28 @@ function peifan() {
 									+ time('开单时间：yyyy年mm月dd日 D H:M:S')
 									+ '</p></div></div></div>';
 				
-				previewBox.innerHTML += printContent;	
+				previewBox.innerHTML += printContent;
+
+				printBox.className = previewBox.className = 'print-wrap scheme';
 
 				wrapList.appendChild(listInfo);
 				wrapList.appendChild(listContent);
 				wrapList.appendChild(listRevise);
 				wrap.appendChild(wrapList);
+
 				banListInput();
 				clearInput();
 				reviseList();
 				wrap.scrollTop = wrap.scrollHeight;
+
+				sessionStorage.setItem('peifan-print-content', previewBox.innerHTML);
 			}
+
 		}
 		
 		function runEntryPanelBtn() {
 
+			var searchBtn = schemeEntry.querySelector('.base-head .search-name');
 			var addoilBtn = schemeEntry.querySelector('.addoil-btn');
 			var packBtn = schemeEntry.querySelector('.pack-btn');
 			var amountBtn = schemeEntry.querySelector('.amount-btn');
@@ -1161,6 +1230,8 @@ function peifan() {
 			var addColorListBtn = schemeEntry.querySelector('.add-color-list');
 			
 			timeNumber.setAttribute('placeholder',time('0ccyymmdd01'))
+
+			searchBtn.onclick = searchData;
 
 			addoilBtn.onclick = function () {
 				this.innerHTML == '否' ? this.innerHTML = '加扩散油' : this.innerHTML = '否';
@@ -1198,7 +1269,9 @@ function peifan() {
 		function banListInput() {	
 			var teamInput = schemeTeam.querySelectorAll('input[type=text]');
 			for(var i=0, len = teamInput.length; i<len; i++) {
-				teamInput[i].setAttribute('disabled','disabled');
+				if(!teamInput[i].getAttribute('not-disabled')) {
+					teamInput[i].setAttribute('disabled','disabled');
+				}
 			}
 		}
 
@@ -1208,6 +1281,7 @@ function peifan() {
 				entryInput[i].value = '';
 			}
 			entryInput[0].focus();
+			runEntryPanelBtn();
 		}
 
 		function reviseList() {
@@ -1219,6 +1293,7 @@ function peifan() {
 					var printBox = document.querySelector('#print-view');
 					var deleteBox = printBox.getElementsByClassName(this.getAttribute('uniqueId'))[0];
 
+					
 					printBox.removeChild(deleteBox);
 					wrap.removeChild(wrap.querySelector('.scheme-list'));
 					wrap.appendChild(content);
@@ -1227,16 +1302,146 @@ function peifan() {
 					for(var i=0, len = aInput.length; i<len; i++) {
 						aInput[i].removeAttribute('disabled');
 					}
+
 					runEntryPanelBtn();
+					removeDisabled('#peifan-1 .scheme-panel');
 				}
 			}
 		}
 
+		function searchData() {
+			var schemeName = schemeEntry.querySelector('.base-head .color-name');
+			var atrr = schemeName.value.toLowerCase().match(/[a-zA-Z0-9]/g);
+			var uid = '';
+
+			if(!atrr) {
+				pointOut('查看编号填写是否正确！')
+			}
+
+			for(var i=0, len=atrr.length; i<len; i++) {
+				uid += atrr[i];
+			}
+			
+			uid = prefixString('0cc1', '0', 11, uid);
+			
+			mySqlDB.open('PEIFAN').show('uid', uid, function(data){
+				if(data.length == 0) {
+					pointOut('此编号没有储存！');
+					return false;
+				}
+
+				data = data[0];
+
+				var addoilBtn = schemeEntry.querySelector('.addoil-btn');
+				var contentBox = schemeEntry.querySelector('.base-color');
+
+				var consistData = JSON.parse(data.consist);
+				var content = document.createElement('content');
+				var objLen = 0;
+				// var content = '';
+
+				schemeName.value = data.name + ' ' + data.color;
+				schemeInfo = data.info + ' ' + data.remark;
+
+				if(schemeInfo.indexOf('扩散油') >=0 || schemeInfo.indexOf('擴散油') >=0) {
+					addoilBtn.innerHTML = '加扩散油';
+				} else {
+					addoilBtn.innerHTML = '否';
+				}
+
+
+				for(var o in consistData) {
+					objLen++;
+					content.innerHTML += '<p class="color-list"><input type="text" class="color" value="' + o + '" disabled="disabled"> <input type="text" class="number" value="' + consistData[o] + '" disabled="disabled"></p>';
+				}
+				
+				if(objLen < 4) {
+					for(var i=0, len=4-objLen; i<len; i++) {
+						content.innerHTML += '<p class="color-list"><input type="text" class="color" disabled="disabled"> <input type="text" class="number" disabled="disabled"></p>';
+					}
+				}
+
+				schemeName.setAttribute('disabled', 'disabled');
+				addoilBtn.setAttribute('disabled', 'disabled');
+				addColorListBtn.setAttribute('disabled', 'disabled');
+				addColorListBtn.setAttribute('disabled', 'disabled');
+				contentBox.innerHTML = content.innerHTML;
+				
+			});
+
+			
+		}
 		
+		function createTags() {
+			var infoList = schemeTeam.querySelectorAll('.list-info');
+			var numberArr = schemeTeam.querySelectorAll('.list-info input');
+			var printView = document.querySelector('#print-view');
+			var printBox = document.querySelector('#print-wrap');
+			var viewBox = document.querySelector('#print-control');
+			var printInfo = viewBox.querySelector('.print-panel .info-panel');
+
+			if(!infoList.length) return;
+
+			var sun = 0;
+
+			var ulHtml = '<ul>';
+
+			sessionStorage.setItem('peifan-print-content', printView.innerHTML);
+
+			for(var i=0, len=infoList.length; i<len; i++) {
+
+				var info = JSON.parse(infoList[i].getAttribute('tags-info'));
+				var num = numberArr[i].value - 0;
+				var content = '<li><p>' + info.name + '</p><p>' + info.oil + '</p><p>配 ' + info.pack + '料用</p><p>' + info.time + '</p></li>';
+
+				for(var j=0; j<num; j++) {
+					sun ++;
+					if(sun == 35) {
+						ulHtml += content + '</ul><ul>';
+						sun = 0;
+					} else {
+						ulHtml += content;
+					}
+				}
+
+			}
+
+			ulHtml += '</ul>';
+			printView.innerHTML = ulHtml;
+			printBox.innerHTML = ulHtml;
+
+			printBox.className = printView.className = 'print-wrap min-tags page-a4 row-4';
+			removeClass(viewBox, 'hide');
+			
+			banListInput();
+			clearInput();
+			reviseList();
+
+			(function () {
+				var al = printBox.querySelectorAll('ul');
+				var bl = printView.querySelectorAll('ul');
+				var i = al.length;
+
+				if(al[i-1].innerHTML == '') {
+					al[i-1].parentNode.removeChild(al[i-1]);
+					bl[i-1].parentNode.removeChild(bl[i-1]);
+					i -=1;
+				}
+
+
+
+				printInfo.innerHTML = '<p><b>打印页数：</b><span>' + i + ' 页</span></p><p><b>纸张大小：</b><span>A4 小标签</span></p>';
+			}());
+
+
+			
+			
+
+		}
+
 
 
 	}());
-
 
 }
 
@@ -1252,6 +1457,154 @@ function peifanadmin() {
 	(function () {
 		if(!document.querySelector('#peifanadmin-1')) return;
 		var container = document.querySelector('#peifanadmin-1');
+		var searchText = container.querySelector('.search-text');
+		var searchBtn = container.querySelector('.search-submit');
+		var tableBox = container.querySelector('.data-table tbody');
+
+		searchBtn.onclick = function () {
+			tableBox.innerHTML = '';
+			if(searchText.value == '' ) {
+				return false;
+			}
+
+			mySqlDB.open('PEIFAN').show('', searchText.value.toLowerCase(), function (data) {
+				var contentHtml = document.createElement('content');
+				var judge = 0;
+				var objLen = 0;
+				var total = 0;
+				
+				for(var i=0, len=data.length; i<len; i++) {
+					(function(data, judge, total){
+						var trHtml = document.createElement('tbody');
+							trHtml.innerHTML = '<tr data-uid="' + data.uid + '"><td>' + data.name + ' ' + data.color +'</td><td>' + data.info + ' ' + data.remark + '</td><td class="ul-contnet"></td></tr>';
+						var consistData = JSON.parse(data.consist);
+						var ulContnet = document.createElement('content');
+						var weight = 0;
+
+						for(var o in consistData) {
+							objLen++;
+						}
+
+						for(var o in consistData) {
+							judge++;
+							weight += consistData[o];
+							ulContnet.innerHTML = '<ul><li><p>UID：' + data.uid + '</p><p><button>修改</button></p>'
+												+'<p>添加日期：' + data.time + '</p>'
+												+'<p>最后修改：' + data.newtime  + '</p>'
+												+'<p>总重量：' + weight + 'G</p><p class="cost"></p>'
+												+'<p><span>厂商</span><span>明细</span><span>单价</span></p></li><li class="consist"></li></ul>';
+
+							var dataInfo = {};
+								dataInfo.name = o;
+								dataInfo.number = consistData[o];
+
+								circulate(dataInfo, ulContnet, trHtml, judge, objLen);
+
+						}
+						
+					}(data[i], judge, total));
+					objLen = 0;
+				}
+
+				function circulate(info, ulContnet, trHtml, judge, objLen) {
+					
+					mySqlDB.open('JISE').show('name', info.name, function(colorData) {
+						colorData = colorData[0];
+						var consist = ulContnet.querySelector('.consist');
+						var trContent = trHtml.querySelector('.ul-contnet');
+						var cost = ulContnet.querySelector('.cost');
+						var price = numMulti(numDiv(colorData.price, 1000), info.number);
+							total = numAdd(price, total);
+
+						consist.innerHTML += '<p><span>' + colorData.vender + '</span><span>' + colorData.name + ' ' + colorData.color + '<b>' + info.number + '克</b></span><span>' + price + '</span></p>';
+						cost.innerHTML = '成本价：$ ' + total + '';
+
+						if(judge == objLen) {
+							trContent.innerHTML = ulContnet.innerHTML;
+							tableBox.innerHTML += trHtml.innerHTML;
+							total = 0;
+							showTr();
+						}
+							
+					});
+				}
+
+			});
+
+		}
+
+		function showTr() {
+			var tr = container.querySelectorAll('.data-table tr');
+			if(!tr) return;
+			var index = 0;
+			addClass(tr[index], 'active');
+
+			for(var i=0, len=tr.length; i<len; i++) {
+				tr[i].index = i;
+				tr[i].onclick = function () {
+					var ele = this;
+					removeClass(tr[index], 'active');
+					addClass(ele, 'active');
+					index = this.index;
+				}
+
+				tr[i].querySelector('.ul-contnet button').onclick = reviseData;
+
+			}	
+		}
+
+		function reviseData() {
+			var trBox = this.parentNode.parentNode.parentNode.parentNode.parentNode;
+			var dataUid = trBox.getAttribute('data-uid');
+
+			var changBtn = document.querySelectorAll('.entry-changing a');
+			var panelContianer = document.querySelectorAll('.panel-container');
+
+			removeClass(changBtn[0], 'active');
+			addClass(changBtn[1], 'active');
+			removeClass(panelContianer[0], 'show');
+			addClass(panelContianer[1], 'show');
+
+
+
+			var container = document.querySelector('#peifanadmin-2 .import-list');
+			var inputObj = {};
+				inputObj.name = container.querySelector('.color-name');
+				inputObj.color = container.querySelector('.color-text');
+				inputObj.info = container.querySelector('.color-info');
+				inputObj.remark = container.querySelector('.color-remark');
+			var colorList = container.querySelectorAll('.color');
+			var numberList = container.querySelectorAll('.number');
+			
+			for(var i=0, len=colorList.length; i<len; i++) {
+				colorList[i].value = '';
+				numberList[i].value = '';
+			}
+
+			mySqlDB.open('PEIFAN').show('uid', dataUid, function (data) {
+				data = data[0];
+				var colorData = JSON.parse(data.consist);
+				var int = 0;
+				sessionStorage.setItem('peifanAdminJudge', data.consist);
+
+				inputObj.name.value = data.name;
+				inputObj.color.value = data.color;
+				inputObj.info.value = data.info;
+				inputObj.remark.value = data.remark;
+
+				for(var o in colorData) {
+					colorList[int].value = o;
+					numberList[int].value = colorData[o];
+					int++;
+				}
+
+				inputObj.name.setAttribute('disabled','disabled');
+				trBox.parentNode.removeChild(trBox);
+				showTr();
+			});
+		}
+
+
 	}());
 
 
@@ -1263,8 +1616,10 @@ function peifanadmin() {
 		var title = {};
 
 		var saveBtn = container.querySelector('.save-button');
+		var searchBtn = container.querySelector('.search-button');
 
 			saveBtn.onclick = getDataAndSave;
+			searchBtn.onclick = getColorData;
 
 		function getDataAndSave() {
 			title.name = container.querySelector('.color-name').value.toLowerCase();
@@ -1278,10 +1633,11 @@ function peifanadmin() {
 			}
 
 			var content = {};
-			var color = container.querySelectorAll('.color');
-			var number = container.querySelectorAll('.number');
+			var color = container.querySelectorAll('.import-list .color');
+			var number = container.querySelectorAll('.import-list .number');
 			var base = {};
 			var num = 0;
+			var colorJudge = true;
 
 			for(var i=0, len=color.length; i<len; i++) {
 				if((color[i].value != '' && number[i].value == '') || (color[i].value == '' && number[i].value != '') || isNaN(number[i].value)) {
@@ -1295,27 +1651,52 @@ function peifanadmin() {
 						mySqlDB.open('JISE').show('name', name, function(data){
 							
 							if(data.length == 0 ) {
-								pointOut('编号【 ' + name + ' 】不存在！');
+								pointOut('基色色粉【 ' + name + ' 】不存在！');
+								colorJudge = false;
 								return;
 							}
 
 							base[name] = number - 0;
 
-							if(judge == num) {
+							if(judge == num && colorJudge) {
 								content.uid = prefixString('0cc1', '0', 11, title.name);
 								content.name = title.name;
 								content.color = title.color;
 								content.info = title.info;
 								content.consist = JSON.stringify(base);
-								content.time = time('yyyy-mm-dd');
-								content.newtime = '未修改';
 								content.remark = title.remark;
-								mySqlDB.open('PEIFAN').add([content]);
-								pointOut('添加配方【' + content.name + '】成功！');
+
+								
+
+								mySqlDB.open('PEIFAN').show('uid', content.uid, function (data) {
+
+									if(data.length == 0) {
+										content.time = time('yyyy-mm-dd');
+										content.newtime = '未修改';
+										mySqlDB.open('PEIFAN').add([content]);
+										pointOut('添加配方【' + content.name + '】成功！');
+									} else {
+
+										if(sessionStorage.getItem('peifanAdminJudge') != content.consist) {
+											content.newtime = time('yyyy-mm-dd');
+										}
+										for(var o in content) {
+											if(o != 'uid' || o != 'name') {
+												(function(target, value) {
+													mySqlDB.open('PEIFAN').update(content.uid, target, value);
+												}(o, content[o]))
+											}
+										}
+										container.querySelector('.color-name').removeAttribute('disabled');
+										pointOut('修改配方【' + content.name + '】成功！');
+									}
+
+								});
+
 
 								var allInput = container.querySelectorAll('.import-panel input');
 								for(var i=0, len=allInput.length; i<len; i++) {
-									allInput.value = '';
+									allInput[i].value = '';
 								}
 								allInput[0].focus();
 
@@ -1326,15 +1707,92 @@ function peifanadmin() {
 			}
 		}
 		
+		function getColorData() {
+			var searchText = container.querySelector('.search-text').value.toLowerCase();
+			searchText = prefixString('0cc1', '0', 11, searchText);
+			
+			mySqlDB.open('PEIFAN').show('uid',searchText,function (data) {
+
+				if(data.length == 0) {
+					pointOut('编号不存在');
+					return false;
+				}
+
+				data = data[0];
+				sessionStorage.setItem('peifanAdminJudge', data.consist);
+
+				var searchContentBox = container.querySelector('.search-content');
+				var consistData = JSON.parse(data.consist);
+				var weight = 0;
+				var bodyData = document.createElement('div');
+				var aColorValue = [];
+				var aNumberValue = [];
+				
+				for(var o in consistData) {
+					weight += consistData[o];
+
+					aColorValue.push(o);
+					aNumberValue.push(consistData[o]);
+
+					(function(colorName, number) {
+						mySqlDB.open('JISE').show('name', colorName, function (colorData) {
+
+							var bodyBox = searchContentBox.querySelector('.body');
+							bodyData.innerHTML += '<p><span class="vender">' + colorData[0].vender + '</span><span>' + colorName + ' ' + colorData[0].color + '</span><span class="value">' + number + '</span></p>';
+							bodyBox.innerHTML = bodyData.innerHTML;
+
+							var reviseBtn = container.querySelector('.revise-button');
+
+							reviseBtn.onclick = function () {
+								title.nameInput = container.querySelector('.color-name');
+								title.colorInput = container.querySelector('.color-text');
+								title.infoInput = container.querySelector('.color-info');
+								title.remarkInput = container.querySelector('.color-remark');
+								var aColorInput = container.querySelectorAll('.import-list .color');
+								var aNumberInput = container.querySelectorAll('.import-list .number');
+
+								
+								title.nameInput.value = data.name;
+								title.colorInput.value = data.color;
+								title.infoInput.value = data.info;
+								title.remarkInput.value = data.remark;
+
+								for(var i=0, len=aColorValue.length; i<len; i++) {
+									aColorInput[i].value = aColorValue[i];
+									aNumberInput[i].value = aNumberValue[i];
+								}
+
+								title.nameInput.setAttribute('disabled','disabled');
+								searchContentBox.removeChild(searchContentBox.querySelector('.box'));
+								
+							}
+
+					    });
+					}(o, consistData[o]));
+
+				}
+
+				var content = '<div class="box"><div class="head"><button class="revise-button">修改</button>'
+                            	+ '<h3><span>颜色编号：</span>' + data.name + ' ' + data.color + '</h3>'
+                            	+ '<h3><span>备注信息：</span>' + data.remark + '</h3>'
+                                + '<p><span>编号详情：</span>' + data.info + '</p>'
+                                + '</div><div class="body"></div><div class="foot">'
+                                + '<h3>总重量：' + weight + ' 克</h3>'
+                                + '<p><span>新建日期：</span>' + data.time + '</p>'
+                                + '<p><span>最后修改：</span>' + data.newtime + '</p>'
+                                + '</div></div>';
+
+				searchContentBox.innerHTML = content;
+
+			})
+		
+		}
+
 
 	}());
 
 
 }
-
-
-
-
 
 
 
@@ -1471,6 +1929,46 @@ function numDiv(num1, num2) {
 };
 
 
+/**
+ * 为元素添加class
+ * 
+ * @param {any} target
+ * @param {any} value
+ */
+function addClass(target, value) {
+    if(!value) return;
+    if(target.className == '' || target.className == value) {
+        target.className = value;
+    } else {
+        removeClass(target, value);
+        target.className += ' ' + value;
+    }
+}
 
+/**
+ * 删除元素指定class
+ * 
+ * @param {any} target
+ * @param {any} value
+ */
+function removeClass(target, value) {
+    if(value == '') return;
+    var clas = target.className;
+    var info = clas.indexOf(value);
+    var linfo = clas.lastIndexOf(value);
+    var len =  clas.length - value.length;
+
+    if(clas == value) {
+        target.className = clas.replace(value, '');
+    } else {
+        if(info == 0 && clas.indexOf(value + ' ') > 0 ) {
+            target.className = clas.replace(value + ' ', '');
+        } else if (linfo == len && clas.lastIndexOf(' ' + value) > 0 ) {
+            target.className = clas.replace(eval("/\\s" + value + "\\b$/"), '');
+        } else if(clas.indexOf(' ' + value + ' ') > 0 ) {
+            target.className = clas.replace(' ' + value, '');
+        }
+    }
+}
 
 

@@ -759,6 +759,11 @@ textarea {
     white-space: nowrap;
 }
 
+#peifan .wrap-list .list-info p input {
+    width: 40%;
+    text-align: center;
+}
+
 #peifan .wrap-list .list-content {
     float: left;
     width: 125px;
@@ -790,7 +795,178 @@ textarea {
     opacity: 0.5;
 }
 
+#peifan-1 .base-head .color-name {
+    width: 200px;
+}
 
+#peifan-1 .base-head .search-name {
+    width: 95px;
+    margin-left: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+#peifanadmin-1 .search-panel {
+    text-align: center;
+}
+
+#peifanadmin-1 .search-text {
+    width: 60%;
+    margin: 10px 0;
+}
+
+
+#peifanadmin-1 .data-head span {
+    width: 40%;
+    height: 45px;
+    line-height: 42px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    float: left;
+    background-color: #ddd;
+    border: 1px solid #95a5b0;
+}
+
+#peifanadmin-1 .data-head span:first-child {
+    width: 20%;
+}
+
+#peifanadmin-1 .data-panel .wrap {
+    position: relative;
+}
+
+#peifanadmin-1 .table-box {
+    height: 390px;
+    border: 1px solid #95a5b0;
+    overflow-x: scroll;
+}
+
+#peifanadmin-1 .table-box::-webkit-scrollbar {
+    width: 0px;
+}
+
+#peifanadmin-1 .data-table {
+    width: 100%;
+}
+
+#peifanadmin-1 .data-table tr {
+    border: 0;
+    cursor: default;
+}
+
+#peifanadmin-1 .data-table tr.active {
+    background-color: #f3f7fa !important;
+}
+
+#peifanadmin-1 .data-table tr:nth-child(2n) {
+    background-color: #fafafa;
+}
+
+#peifanadmin-1 .data-table tr td:last-child {
+    display: none;
+}
+
+#peifanadmin-1 .data-table tr.active td:last-child {
+    display: block;
+}
+
+#peifanadmin-1 .data-table td {
+    width: 40%;
+    font-size: 12px;
+    line-height: 25px;
+    padding: 10px 20px;
+    border: 0;
+    border-bottom: 1px solid #95a5b0;
+}
+
+#peifanadmin-1 .data-table td:first-child {
+    width: 20%;
+    font-size: 14px;
+    border-right: 2px solid #95a5b0;
+}
+
+#peifanadmin-1 .data-table td ul {
+    position: absolute;
+    top: 56px;
+    right: 10px;
+    width: calc( 40% - 7px );
+    height: 385px;
+    background-color: #f3f7fa;
+    border-left: 2px solid #95a5b0;
+    border-right: 1px solid #95a5b0;
+    overflow-y: scroll;
+}
+
+#peifanadmin-1 .data-table td ul::-webkit-scrollbar {
+    width: 0;
+}
+
+#peifanadmin-1 .data-table td ul li {
+    padding: 5px 10px;
+    line-height: 30px;
+}
+
+#peifanadmin-1 .data-table td ul li:first-child:after {
+    content: '';
+    height: 0px;
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+#peifanadmin-1 .data-table td ul li:first-child p {
+    float: left;
+    width: 50%;
+}
+
+#peifanadmin-1 .data-table td ul li:first-child p:last-child {
+    width: 100%;
+    margin-top: 10px;
+    border-top: 1px solid #95a5b0;
+    border-bottom: 1px solid #95a5b0;
+}
+
+#peifanadmin-1 .data-table td ul li:first-child p:last-child span:nth-child(2) {
+    padding-left: 50px;
+}
+
+#peifanadmin-1 .data-table td ul p {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+}
+
+#peifanadmin-1 .data-table td ul button {
+    padding: 0px 20px;
+    height: 20px;
+    line-height: 20px;
+}
+
+#peifanadmin-1 .data-table td ul span {
+    display: inline-block;
+    width: 70%;
+    height: 30px;
+    line-height: 30px;
+    word-spacing: 10px;
+}
+
+#peifanadmin-1 .data-table td ul span b {
+    float: right;
+    margin-right: 30px;
+}
+
+#peifanadmin-1 .data-table td ul span:last-child,
+#peifanadmin-1 .data-table td ul span:first-child {
+    width: 15%;
+}
 
 
 
@@ -832,14 +1008,95 @@ textarea {
     padding: 10px 0;
 }
 
-#peifanadmin-2 .search-input .text {
+#peifanadmin-2 .search-text {
     width: 245px;
 }
 
 #peifanadmin-2 .search-content {
     height: 440px;
     margin: 10px 0;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #fafafa;
+}
+
+#peifanadmin-2 .search-content span {
+    font-weight: 200;
+}
+
+#peifanadmin-2 .search-content p {
+    height: 28px;
+    line-height: 28px;
+}
+
+#peifanadmin-2 .search-content .head {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px 5px 0px 0px;
+    font-size: 12px;
+    position: relative;
+}
+
+#peifanadmin-2 .search-content .revise-button {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    border-radius: 0px;
+    padding: 0px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    width: 40px;
+}
+
+#peifanadmin-2 .search-content .head h3 {
+    height: 25px;
+    line-height: 20px;
+}
+
+#peifanadmin-2 .search-content .head p {
+    height: 40px;
+    line-height: 20px;
+    word-spacing: 5px;
+    overflow: hidden;
+}
+
+#peifanadmin-2 .search-content .head p span {
+    height: 40px;
+    float: left;
+}
+
+#peifanadmin-2 .search-content .body {
+    padding: 8px 10px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    font-size: 14px;
+    height: 240px;
+}
+
+#peifanadmin-2 .search-content .body span {
+    display: inline-block;
+    width: 60%;
+}
+
+#peifanadmin-2 .search-content .body .vender,
+#peifanadmin-2 .search-content .body .value {
+    width: 20%
+}
+
+#peifanadmin-2 .search-content .foot {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    border-radius: 0px 0px 5px 5px;
+    position: relative;
+}
+
+#peifanadmin-2 .search-content .foot h3 {
+    position: absolute;
+    right: 0px;
+    top: 15px;
+    height: 30px;
+    width: 100px;
 }

@@ -6,9 +6,8 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css">
     <link rel="stylesheet" type="text/css" href="../css/print.css">
     <script type="text/javascript" src="../js/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/indexedb.js"></script>
+    <script type="text/javascript" src="../js/websqldb.js"></script>
     <script type="text/javascript" src="../js/script.js"></script>
-    <script type="text/javascript" src="../js/print.js"></script>
 </head>
 <body>
     <!-- 主面板 START -->
@@ -28,7 +27,33 @@
             
             <!-- 包装面板 （1） START -->
             <div class="panel-container show">
-                1
+                <div id="peifanadmin-1"> 
+                    <div class="panel-wrap">
+                        <div class="search-panel">
+                            <div class="wrap">
+                                <input class="search-text" type="text" name="" value="">
+                                <input class="search-submit" type="button" value="搜索">
+                            </div>
+                        </div>
+                        <div class="data-panel">
+                            <div class="wrap">
+                                <div class="data-head">
+                                    <span>编号颜色</span>
+                                    <span>详情备注</span>
+                                    <span>配方信息</span>
+                                </div>
+                                <div class="table-box">
+                                    <table class="data-table" border="0" cellspacing="0" cellpadding="0">
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button class="reset-button" tabIndex="-1">重置面板</button>
+                    </div>  
+                </div>
             </div>
             <!-- 包装面板 （1） END -->
             
@@ -62,11 +87,10 @@
                         <div class="search-panel row-4">
                             <div class="wrap">
                                 <div class="search-input">
-                                    <input class="text" type="text" placeholder="输入色粉编号搜索">
-                                    <input class="submit" type="button" value="搜索">
+                                    <input class="search-text" type="text" placeholder="输入色粉编号搜索">
+                                    <input class="search-button green" type="button" value="搜索">
                                 </div>
                                 <div class="search-content">
-
                                 </div>
                             </div>
                         </div>
@@ -74,7 +98,7 @@
                     <div class="panel-footer">
                         <button class="reset-button" tabIndex="-1">重置面板</button>
                         <button class="save-button green right" tabIndex="-1">保存配方</button>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <!-- 包装面板 （2） END -->
