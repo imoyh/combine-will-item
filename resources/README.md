@@ -1,6 +1,6 @@
 ## 目录信息
 
-CSS  
+css  
 　|＿＿ entry.css  
 　|＿＿ print.css  
 　|＿＿ style.css    
